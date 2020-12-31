@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTTK", "PTTK\PTTK.csproj", "{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F1BA31B-1274-4D94-93D7-1729D43F2231}
+	EndGlobalSection
+EndGlobal
