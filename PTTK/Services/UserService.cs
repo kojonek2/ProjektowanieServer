@@ -47,7 +47,7 @@ namespace PTTK.Services
 
         public User GetById(int id)
         {
-            return _context.Users.Include(u => u.TuristData).FirstOrDefault(u => u.Id == id);
+            return _context.Users.Include(u => u.TuristData).ThenInclude(td => td.LeaderData).FirstOrDefault(u => u.Id == id);
         }
 
         private string generateJwtToken(User user)

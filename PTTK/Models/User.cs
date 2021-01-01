@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PTTK.Models
@@ -10,6 +11,8 @@ namespace PTTK.Models
     {
         public int Id { get; set; }
         public string Login { get; set; }
+
+        [JsonIgnore]
         public string Password { get; set; }
         public string Email { get; set; }
         public DateTime JoinDate { get; set; }
@@ -17,6 +20,7 @@ namespace PTTK.Models
 
         public bool isTurist { get { return TuristData != null; } }
         public TuristData? TuristData { get; set; }
-       
+
+        public bool isLeader { get { return isTurist && TuristData.IsLeader; } }
     }
 }

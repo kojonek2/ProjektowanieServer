@@ -31,7 +31,33 @@ namespace PTTK.Controllers
         [Route("turists")]
         public IEnumerable<bool> Tourists()
         {
-            return _context.Users.Select(u => u.isTurist).ToArray();
+            return _context.Users.Include(u => u.TuristData).Select(u => u.isTurist).ToArray();
+        }
+
+        [Route("leaders")]
+        public IEnumerable<bool> Leaders()
+        {
+            return _context.Users.Include(u => u.TuristData).ThenInclude(td => td.LeaderData).Select(u => u.isLeader).ToArray();
+        }
+
+        [Route("leaders1")]
+        public IEnumerable<User> Leaders1()
+        {
+            return _context.Users.Include(u => u.TuristData)
+                .ThenInclude(td => td.LeaderData)
+                .ThenInclude(l => l.PermissionsForMountainGroups)
+                .Where(u => u.TuristData != null && u.TuristData.LeaderData != null)
+                .ToArray();
+        }
+
+        [Route("routes")]
+        public IEnumerable<Route> Routes()
+        {
+            return _context.Routes
+                .Include(r => r.CustomRouteData)
+                .Include(r => r.StandardRouteData)
+                .Include(r => r.MountainGroup)
+                .ToArray();
         }
 
         [Route("hash/{password}")]
