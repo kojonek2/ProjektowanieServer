@@ -49,12 +49,12 @@ namespace PTTK.Services
 
         private void CheckDuplicateAndRequiredArguments(MountainGroup mountainGroup)
         {
-            if (mountainGroup.Name == null || mountainGroup.Abbreviation == null)
+            if (string.IsNullOrEmpty(mountainGroup.Name) || string.IsNullOrEmpty(mountainGroup.Abbreviation))
             {
                 throw new ArgumentException("Mountain group has to contain Name and Abbreviation!");
             }
 
-            bool duplicate = _context.MountainGroups.Any(m => m.Name == mountainGroup.Name);
+            bool duplicate = _context.MountainGroups.Where(m => m.Id != mountainGroup.Id).Any(m => m.Name == mountainGroup.Name);
             if (duplicate)
             {
                 throw new ArgumentException("Mountain group with that name already exists!");
