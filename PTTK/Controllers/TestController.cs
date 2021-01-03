@@ -57,6 +57,17 @@ namespace PTTK.Controllers
                 .Include(r => r.CustomRouteData)
                 .Include(r => r.StandardRouteData)
                 .Include(r => r.MountainGroup)
+                .Include(r => r.StartingPoint)
+                .Include(r => r.EndingPoint)
+                .ToArray();
+        }
+
+        [Route("routepoints1")]
+        public IEnumerable<RoutePoint> RoutePoints()
+        {
+            return _context.RoutePoints
+                .Include(p => p.RoutesStartingWithPoint)
+                .Include(p => p.RoutesEndingWithPoint)
                 .ToArray();
         }
 

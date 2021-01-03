@@ -11,6 +11,7 @@ namespace PTTK.Models
         public DbSet<User> Users { get; set; }
         public DbSet<MountainGroup> MountainGroups { get; set; }
         public DbSet<Route> Routes { get; set; }
+        public DbSet<RoutePoint> RoutePoints { get; set; }
 
         public PTTKContext(DbContextOptions<PTTKContext> options) : base(options)
         {
@@ -19,6 +20,14 @@ namespace PTTK.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Route>(e => {
+                e.HasOne(r => r.StartingPoint)
+                .WithMany(p => p.RoutesStartingWithPoint);
+
+                e.HasOne(r => r.EndingPoint)
+                .WithMany(p => p.RoutesEndingWithPoint);
+            });
 
             modelBuilder.Entity<StandardRouteData>(e =>
             {

@@ -18,6 +18,14 @@ namespace PTTK.Models
         [ForeignKey(nameof(MountainGroup))]
         public int? MountainGroupId { get; set; }
 
+        [JsonIgnore]
+        [ForeignKey(nameof(StartingPoint))]
+        public int StartPointId { get; set; }
+
+        [JsonIgnore]
+        [ForeignKey(nameof(EndingPoint))]
+        public int EndPointId { get; set; }
+
 
         public bool isStandardRoute { get { return StandardRouteData != null; } }
         public StandardRouteData? StandardRouteData { get; set; }
@@ -26,5 +34,8 @@ namespace PTTK.Models
         public CustomRouteData? CustomRouteData { get; set; }
 
         public MountainGroup? MountainGroup { get; set; }
+
+        public RoutePoint StartingPoint { get; set; }
+        public RoutePoint EndingPoint { get; set; }
     }
 }

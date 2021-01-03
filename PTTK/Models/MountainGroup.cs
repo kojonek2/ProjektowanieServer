@@ -10,6 +10,9 @@ namespace PTTK.Models
     [Table("mountain_group")]
     public class MountainGroup
     {
+        public const int NAME_MAX_LENGTH = 50;
+        public const int ABBREVIATION_MAX_LENGTH = 15;
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Abbreviation { get; set; }

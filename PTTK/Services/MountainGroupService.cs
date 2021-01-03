@@ -54,6 +54,16 @@ namespace PTTK.Services
                 throw new ArgumentException("Mountain group has to contain Name and Abbreviation!");
             }
 
+            if (mountainGroup.Name.Length > MountainGroup.NAME_MAX_LENGTH)
+            {
+                throw new ArgumentException($"Name has max length is equal to {MountainGroup.NAME_MAX_LENGTH}!");
+            }
+
+            if (mountainGroup.Abbreviation.Length > MountainGroup.ABBREVIATION_MAX_LENGTH)
+            {
+                throw new ArgumentException($"Abbreviation has max length is equal to {MountainGroup.ABBREVIATION_MAX_LENGTH}!");
+            }
+
             bool duplicate = _context.MountainGroups.Where(m => m.Id != mountainGroup.Id).Any(m => m.Name == mountainGroup.Name);
             if (duplicate)
             {
