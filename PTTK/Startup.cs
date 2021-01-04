@@ -29,6 +29,7 @@ namespace PTTK
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMountainGroupService, MountainGroupService>();
             services.AddScoped<IRoutePointService, RoutePointService>();
+            services.AddScoped<IBadgeApplicationService, BadgeApplicationService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

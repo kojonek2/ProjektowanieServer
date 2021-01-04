@@ -26,5 +26,11 @@ namespace PTTK.Models
         [JsonIgnore]
         public bool IsLeader { get { return LeaderData != null && (LeaderData.ResignationDate == null || LeaderData.ResignationDate >= DateTime.Now); } }
         public LeaderData? LeaderData { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Tour> Tours { get; set; }
+
+        [JsonIgnore]
+        public ICollection<BadgeApplication> FiledBadgeApplications { get; set; }
     }
 }

@@ -29,9 +29,9 @@ namespace PTTK.Controllers
         }
 
         [Route("turists")]
-        public IEnumerable<bool> Tourists()
+        public IEnumerable<User> Tourists()
         {
-            return _context.Users.Include(u => u.TuristData).Select(u => u.isTurist).ToArray();
+            return _context.Users.Include(u => u.TuristData).ThenInclude(t => t.Tours).Where(u => u.TuristData != null).ToArray();
         }
 
         [Route("leaders")]
@@ -53,13 +53,15 @@ namespace PTTK.Controllers
         [Route("routes")]
         public IEnumerable<Route> Routes()
         {
-            return _context.Routes
+            var a = _context.Routes
                 .Include(r => r.CustomRouteData)
                 .Include(r => r.StandardRouteData)
                 .Include(r => r.MountainGroup)
                 .Include(r => r.StartingPoint)
                 .Include(r => r.EndingPoint)
+                .Include(r => r.Entries)
                 .ToArray();
+            return a;
         }
 
         [Route("routepoints1")]
@@ -68,6 +70,39 @@ namespace PTTK.Controllers
             return _context.RoutePoints
                 .Include(p => p.RoutesStartingWithPoint)
                 .Include(p => p.RoutesEndingWithPoint)
+                .ToArray();
+        }
+
+        [Route("badgeranks1")]
+        public IEnumerable<BadgeRank> BadgeRanks()
+        {
+            return _context.BadgeRanks
+                .Include(r => r.Badge)
+                .ToArray();
+        }
+
+        [Route("tours1")]
+        public IEnumerable<Tour> Tours()
+        {
+            return _context.Tours
+                .Include(t => t.Entries).ThenInclude(e => e.Route.MountainGroup)
+                .Include(t => t.Entries).ThenInclude(e => e.Route.StandardRouteData)
+                .Include(t => t.Entries).ThenInclude(e => e.Route.CustomRouteData)
+                .Include(t => t.Entries).ThenInclude(e => e.Route.StartingPoint)
+                .Include(t => t.Entries).ThenInclude(e => e.Route.EndingPoint)
+                .Include(t => t.Turist)
+                .ToArray();
+        }
+
+
+        [Route("badgeapplications1")]
+        public IEnumerable<BadgeApplication> BadgeApplications()
+        {
+            return _context.BadgeApplications
+                .Include(t => t.Rank.Badge)
+                .Include(t => t.Turist.User)
+                .Include(t => t.Leader.TuristData.User)
+                .Include(t => t.Tours).ThenInclude(t => t.Entries)
                 .ToArray();
         }
 

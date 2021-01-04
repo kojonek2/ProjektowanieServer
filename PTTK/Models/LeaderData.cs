@@ -24,5 +24,8 @@ namespace PTTK.Models
         public TuristData TuristData { get; set; }
 
         public ICollection<MountainGroup> PermissionsForMountainGroups { get; set; }
+
+        [JsonIgnore]
+        public ICollection<BadgeApplication> BadgeApplicationsAssigned { get; set; }
     }
 }

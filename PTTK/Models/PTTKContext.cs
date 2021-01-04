@@ -12,6 +12,9 @@ namespace PTTK.Models
         public DbSet<MountainGroup> MountainGroups { get; set; }
         public DbSet<Route> Routes { get; set; }
         public DbSet<RoutePoint> RoutePoints { get; set; }
+        public DbSet<BadgeRank> BadgeRanks { get; set; }
+        public DbSet<Tour> Tours { get; set; }
+        public DbSet<BadgeApplication> BadgeApplications { get; set; }
 
         public PTTKContext(DbContextOptions<PTTKContext> options) : base(options)
         {
@@ -29,10 +32,62 @@ namespace PTTK.Models
                 .WithMany(p => p.RoutesEndingWithPoint);
             });
 
-            modelBuilder.Entity<StandardRouteData>(e =>
-            {
+            modelBuilder.Entity<StandardRouteData>(e => {
                 e.Property(e => e.Difficulty)
                     .HasConversion(d => d.ToString(), d => Enum.Parse<Difficulty>(d));
+            });
+
+            modelBuilder.Entity<Badge>(e => {
+                e.Property(e => e.Type)
+                    .HasConversion(t => t.ToString(), t => Enum.Parse<BadgeType>(t));
+            });
+
+            modelBuilder.Entity<BadgeRank>(e => {
+                e.HasOne(r => r.Badge)
+                .WithMany(b => b.Ranks);
+            });
+
+            modelBuilder.Entity<Entry>(e => {
+                e.HasOne(e => e.Route)
+                .WithMany(r => r.Entries);
+
+                e.HasOne(e => e.Tour)
+               .WithMany(t => t.Entries);
+            });
+
+            modelBuilder.Entity<Tour>(e =>
+            {
+                e.HasOne(t => t.Turist)
+                .WithMany(t => t.Tours);
+            });
+
+
+            modelBuilder.Entity<BadgeApplication>(e =>
+            {
+                e.Property(e => e.Status)
+                .HasConversion(s => s.ToString(), s => Enum.Parse<VerificationStatus>(s));
+
+                e.HasOne(b => b.Rank)
+                .WithMany(r => r.BadgeApplications);
+
+                e.HasOne(b => b.Turist)
+                .WithMany(t => t.FiledBadgeApplications);
+
+                e.HasOne(b => b.Leader)
+                .WithMany(r => r.BadgeApplicationsAssigned);
+
+                e.HasMany(b => b.Tours)
+                .WithMany(t => t.BadgeApplications)
+                .UsingEntity<Dictionary<string, object>>(
+                    "badge_application_tours",
+                    j => j
+                    .HasOne<Tour>()
+                    .WithMany()
+                    .HasForeignKey("tourId"),
+                    j => j
+                    .HasOne<BadgeApplication>()
+                    .WithMany()
+                    .HasForeignKey("badgeApplicationId"));
             });
 
             modelBuilder.Entity<LeaderData>()

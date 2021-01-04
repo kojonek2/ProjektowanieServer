@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS badge_application_tours
+DROP TABLE IF EXISTS badge_applications
+DROP TABLE IF EXISTS entries
+DROP TABLE IF EXISTS tours
+DROP TABLE IF EXISTS badge_ranks
+DROP TABLE IF EXISTS badges
 DROP TABLE IF EXISTS standard_routes_data
 DROP TABLE IF EXISTS custom_routes_data
 DROP TABLE IF EXISTS routes
@@ -112,3 +118,88 @@ INSERT INTO standard_routes_data VALUES ((SELECT MIN(id) FROM routes WHERE name 
 INSERT INTO standard_routes_data VALUES ((SELECT MIN(id) FROM routes WHERE name = 'Trasa jubileuszowa'), '2010-01-01', NULL, 45, 'Moderate')
 INSERT INTO standard_routes_data VALUES ((SELECT MAX(id) FROM routes WHERE name = 'Trasa Stulecia'), '2000-01-01', NULL, 75, 'Easy')
 INSERT INTO standard_routes_data VALUES ((SELECT MAX(id) FROM routes WHERE name = 'Trasa jubileuszowa'), '2010-01-01', NULL, 45, 'Easy')
+
+CREATE TABLE badges (
+	id INT IDENTITY PRIMARY KEY,
+	type VARCHAR(20) NOT NULL CHECK (type IN('IntoMountains', 'Popular', 'Small', 'Big', 'ForPersistance'))
+)
+
+INSERT INTO badges(type) VALUES ('IntoMountains')
+INSERT INTO badges(type) VALUES ('Popular')
+INSERT INTO badges(type) VALUES ('Small')
+INSERT INTO badges(type) VALUES ('Big')
+INSERT INTO badges(type) VALUES ('ForPersistance')
+
+CREATE TABLE badge_ranks(
+	id INT IDENTITY PRIMARY KEY,
+	name VARCHAR(50) NOT NULL,
+	quota INT,
+	badgeId INT FOREIGN KEY REFERENCES badges(id) NOT NULL
+)
+
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Br頊owy', 15, (SELECT id FROM badges WHERE type = 'IntoMountains'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Srebny', 30, (SELECT id FROM badges WHERE type = 'IntoMountains'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Z這ty', 45, (SELECT id FROM badges WHERE type = 'IntoMountains'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Popularny', 60, (SELECT id FROM badges WHERE type = 'Popular'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Br頊owy', 120, (SELECT id FROM badges WHERE type = 'Small'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Srebny', 360, (SELECT id FROM badges WHERE type = 'Small'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Z這ty', 720, (SELECT id FROM badges WHERE type = 'Small'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Br頊owy', NULL, (SELECT id FROM badges WHERE type = 'Big'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Srebny', NULL, (SELECT id FROM badges WHERE type = 'Big'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Z這ty', NULL, (SELECT id FROM badges WHERE type = 'Big'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Ma造', NULL, (SELECT id FROM badges WHERE type = 'ForPersistance'))
+INSERT INTO badge_ranks(name, quota, badgeId) VALUES ('Du篡', NULL, (SELECT id FROM badges WHERE type = 'ForPersistance'))
+
+CREATE TABLE tours (
+	id INT IDENTITY PRIMARY KEY,
+	entryDate DATE DEFAULT GETDATE() NOT NULL,
+	turistId INT FOREIGN KEY REFERENCES turists_data(userId) NOT NULL
+)
+
+INSERT INTO tours(entryDate, turistId) VALUES ('05-09-2020', (SELECT userId FROM turists_data WHERE sureName = 'Ma造sz'))
+INSERT INTO tours(entryDate, turistId) VALUES ('09-20-2020', (SELECT userId FROM turists_data WHERE sureName = 'Ma造sz'))
+INSERT INTO tours(entryDate, turistId) VALUES ('07-15-2020', (SELECT userId FROM turists_data WHERE sureName = 'Skalisty'))
+
+CREATE TABLE entries (
+	id INT IDENTITY PRIMARY KEY,
+	dateOfPassing DATE DEFAULT GETDATE() NOT NULL,
+	verified BIT NOT NULL,
+	routeId INT FOREIGN KEY REFERENCES routes(id) NOT NULL,
+	tourId INT FOREIGN KEY REFERENCES tours(id) NOT NULL
+)
+
+INSERT INTO entries(dateOfPassing, verified, routeId, tourId) VALUES ('05-09-2020', 1, 1, (SELECT id FROM tours WHERE entryDate = '05-09-2020'))
+INSERT INTO entries(dateOfPassing, verified, routeId, tourId) VALUES ('05-09-2020', 1, 3, (SELECT id FROM tours WHERE entryDate = '05-09-2020'))
+INSERT INTO entries(dateOfPassing, verified, routeId, tourId) VALUES ('09-20-2020', 1, 5, (SELECT id FROM tours WHERE entryDate = '09-20-2020'))
+INSERT INTO entries(dateOfPassing, verified, routeId, tourId) VALUES ('07-15-2020', 1, 3, (SELECT id FROM tours WHERE entryDate = '07-15-2020'))
+
+CREATE TABLE badge_applications (
+	id INT IDENTITY PRIMARY KEY,
+	awardDate DATE,
+	status VARCHAR(20) NOT NULL CHECK(status IN ('Approved', 'Rejected', 'InProgress')),
+	description VARCHAR(500),
+	rankId INT FOREIGN KEY REFERENCES badge_ranks(id) NOT NULL,
+	leaderId INT FOREIGN KEY REFERENCES leader_data(userId) NOT NULL,
+	turistId INT FOREIGN KEY REFERENCES turists_data(userId) NOT NULL,
+	CHECK((status = 'Approved' AND awardDate IS NOT NULL) 
+		OR (status = 'Rejected' AND description IS NOT NULL) 
+		OR (status = 'InProgress'))
+)
+
+INSERT INTO badge_applications(status, rankId, leaderId, turistId) VALUES ('InProgress', (SELECT id FROM badge_ranks WHERE quota = 60), 
+														(SELECT id FROM users WHERE login = 'przodownik2'), 
+														(SELECT userId FROM turists_data WHERE sureName = 'Ma造sz'))
+INSERT INTO badge_applications(status, rankId, leaderId, turistId) VALUES ('InProgress', (SELECT id FROM badge_ranks WHERE quota = 120), 
+														(SELECT id FROM users WHERE login = 'przodownik2'), 
+														(SELECT userId FROM turists_data WHERE sureName = 'Skalisty'))
+
+
+CREATE TABLE badge_application_tours (
+	badgeApplicationId INT FOREIGN KEY REFERENCES badge_applications(id),
+	tourId int FOREIGN KEY REFERENCES mountain_group(id),
+	PRIMARY KEY(badgeApplicationId, tourId)
+)
+
+INSERT INTO badge_application_tours VALUES (1, 1)
+INSERT INTO badge_application_tours VALUES (1, 2)
+INSERT INTO badge_application_tours VALUES (2, 3)

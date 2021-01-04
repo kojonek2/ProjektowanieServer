@@ -37,5 +37,8 @@ namespace PTTK.Models
 
         public RoutePoint StartingPoint { get; set; }
         public RoutePoint EndingPoint { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Entry> Entries { get; set; }
     }
 }
