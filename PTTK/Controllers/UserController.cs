@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PTTK.Models;
 using PTTK.Services;
+using PTTK.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,19 @@ namespace PTTK.Controllers
                 return BadRequest(new { message = "Bad login or password!" });
 
             return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("user")]
+        public IActionResult GetUser()
+        {
+            User user = HttpContext.Items[Constants.UserKey] as User;
+            if (user == null)
+            {
+                return Unauthorized(new { Message = "User has to be an admin to use this request!" });
+            }
+
+            return Ok(user);
         }
     }
 }
