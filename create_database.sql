@@ -94,7 +94,7 @@ CREATE TABLE routes (
 
 INSERT INTO routes(name, length, sumOfClimbs, mountainGroupId, startPointId, endPointId) VALUES ('Trasa Stulecia', 2.5, 356, (SELECT id FROM mountain_group WHERE name = 'Beskidy Œl¹sk'), 2, 1)
 INSERT INTO routes(name, length, sumOfClimbs, mountainGroupId, startPointId, endPointId) VALUES ('Trasa jubileuszowa', 1.23, 500, (SELECT id FROM mountain_group WHERE name = 'Beskidy Œl¹sk'), 2, 1)
-INSERT INTO routes(name, length, sumOfClimbs, mountainGroupId, startPointId, endPointId) VALUES ('Trasa Stulecia', 2.5, 0, (SELECT id FROM mountain_group WHERE name = 'Beskidy Œl¹sk'), 1, 2)
+INSERT INTO routes(name, length, sumOfClimbs, mountainGroupId, startPointId, endPointId) VALUES ('Trasa Stulecia', 2.5, 0, (SELECT id FROM mountain_group WHERE name = 'Tatry wysokie'), 1, 2)
 INSERT INTO routes(name, length, sumOfClimbs, mountainGroupId, startPointId, endPointId) VALUES ('Trasa jubileuszowa', 1.23, 0, (SELECT id FROM mountain_group WHERE name = 'Beskidy Œl¹sk'), 1, 2)
 INSERT INTO routes(name, length, sumOfClimbs, mountainGroupId, startPointId, endPointId) VALUES ('W ko³o slê¿y', 10, 100, (SELECT id FROM mountain_group WHERE name = 'Beskid Niski'), 3, 3)
 
@@ -170,7 +170,7 @@ CREATE TABLE entries (
 
 INSERT INTO entries(dateOfPassing, verified, routeId, tourId) VALUES ('05-09-2020', 1, 1, (SELECT id FROM tours WHERE entryDate = '05-09-2020'))
 INSERT INTO entries(dateOfPassing, verified, routeId, tourId) VALUES ('05-09-2020', 1, 3, (SELECT id FROM tours WHERE entryDate = '05-09-2020'))
-INSERT INTO entries(dateOfPassing, verified, routeId, tourId) VALUES ('09-20-2020', 1, 5, (SELECT id FROM tours WHERE entryDate = '09-20-2020'))
+INSERT INTO entries(dateOfPassing, verified, routeId, tourId) VALUES ('09-20-2019', 1, 5, (SELECT id FROM tours WHERE entryDate = '09-20-2020'))
 INSERT INTO entries(dateOfPassing, verified, routeId, tourId) VALUES ('07-15-2020', 1, 3, (SELECT id FROM tours WHERE entryDate = '07-15-2020'))
 
 CREATE TABLE badge_applications (
@@ -186,9 +186,12 @@ CREATE TABLE badge_applications (
 		OR (status = 'InProgress'))
 )
 
-INSERT INTO badge_applications(status, rankId, leaderId, turistId) VALUES ('InProgress', (SELECT id FROM badge_ranks WHERE quota = 60), 
+INSERT INTO badge_applications(status, description, rankId, leaderId, turistId) VALUES ('InProgress', 'Pierwsza odznaka', (SELECT id FROM badge_ranks WHERE quota = 60), 
 														(SELECT id FROM users WHERE login = 'przodownik2'), 
 														(SELECT userId FROM turists_data WHERE sureName = 'Ma³ysz'))
+INSERT INTO badge_applications(status, awardDate, rankId, leaderId, turistId) VALUES ('Approved', '07-07-2019', (SELECT id FROM badge_ranks WHERE quota = 60), 
+														(SELECT id FROM users WHERE login = 'przodownik2'), 
+														(SELECT userId FROM turists_data WHERE sureName = 'Skalisty'))
 INSERT INTO badge_applications(status, rankId, leaderId, turistId) VALUES ('InProgress', (SELECT id FROM badge_ranks WHERE quota = 120), 
 														(SELECT id FROM users WHERE login = 'przodownik2'), 
 														(SELECT userId FROM turists_data WHERE sureName = 'Skalisty'))
@@ -202,4 +205,4 @@ CREATE TABLE badge_application_tours (
 
 INSERT INTO badge_application_tours VALUES (1, 1)
 INSERT INTO badge_application_tours VALUES (1, 2)
-INSERT INTO badge_application_tours VALUES (2, 3)
+INSERT INTO badge_application_tours VALUES (3, 3)

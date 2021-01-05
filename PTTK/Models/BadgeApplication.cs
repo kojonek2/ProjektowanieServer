@@ -10,6 +10,8 @@ namespace PTTK.Models
     [Table("badge_applications")]
     public class BadgeApplication
     {
+        public const int DESCRIPTION_MAX_LENGTH = 500;
+
         public int Id { get; set; }
         public DateTime? AwardDate { get; set; }
 
@@ -28,7 +30,6 @@ namespace PTTK.Models
 
 
         [ForeignKey(nameof(Turist))]
-        [JsonIgnore]
         public int TuristId { get; set; }
 
         public BadgeRank Rank { get; set; }

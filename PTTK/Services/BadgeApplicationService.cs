@@ -29,5 +29,44 @@ namespace PTTK.Services
                 .Include(ba => ba.Tours).ThenInclude(t => t.Entries).ThenInclude(e => e.Route.EndingPoint)
                 .ToArray();
         }
+
+        public IEnumerable<BadgeApplication> GetApprovedBadgeApplicationsForTurist(int id)
+        {
+            return _context.BadgeApplications
+                .Include(r => r.Rank.Badge)
+                .Where(ba => ba.TuristId == id && ba.Status == VerificationStatus.Approved)
+                .ToArray();
+        }
+
+        public void UpdateBadgeApplication(BadgeApplication badgeApplication, int RequesterUserId)
+        {
+            BadgeApplication badgeApplicationFromDatabase = _context.BadgeApplications.FirstOrDefault(ba => ba.Id == badgeApplication.Id);
+            if (badgeApplicationFromDatabase == null)
+            {
+                throw new ArgumentException($"Badge application with id {badgeApplication.Id} does not exist!");
+            }
+
+            if (badgeApplicationFromDatabase.LeaderId != RequesterUserId)
+            {
+                throw new UnauthorizedAccessException("This request can be performed only by assigned leader!");
+            }
+
+            if (badgeApplication.Description.Length > BadgeApplication.DESCRIPTION_MAX_LENGTH)
+            {
+                throw new ArgumentException($"Description length must be lower or equal to {BadgeApplication.DESCRIPTION_MAX_LENGTH}");
+            }
+
+            if (badgeApplication.Status == VerificationStatus.Rejected && badgeApplication.Description == null)
+            {
+                throw new ArgumentException($"Application has to contain description when it is being rejected!");
+            }
+
+            if (badgeApplication.Status == VerificationStatus.Approved)
+                badgeApplicationFromDatabase.AwardDate = DateTime.Now.Date;
+
+            badgeApplicationFromDatabase.Description = badgeApplication.Description;
+            badgeApplicationFromDatabase.Status = badgeApplication.Status;
+            _context.SaveChanges();
+        }
     }
 }
