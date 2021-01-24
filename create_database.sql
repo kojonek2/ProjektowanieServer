@@ -199,10 +199,33 @@ INSERT INTO badge_applications(status, rankId, leaderId, turistId) VALUES ('InPr
 
 CREATE TABLE badge_application_tours (
 	badgeApplicationId INT FOREIGN KEY REFERENCES badge_applications(id),
-	tourId int FOREIGN KEY REFERENCES mountain_group(id),
+	tourId int FOREIGN KEY REFERENCES tours(id),
 	PRIMARY KEY(badgeApplicationId, tourId)
 )
 
 INSERT INTO badge_application_tours VALUES (1, 1)
 INSERT INTO badge_application_tours VALUES (1, 2)
 INSERT INTO badge_application_tours VALUES (3, 3)
+
+
+CREATE TABLE veryfication_applications (
+	id INT IDENTITY PRIMARY KEY,
+	veryficationDate DATE,
+	status VARCHAR(20) NOT NULL CHECK(status IN ('Approved', 'Rejected', 'InProgress')),
+	description VARCHAR(500),
+	CHECK((status = 'Approved' AND veryficationDate IS NOT NULL) 
+		OR (status = 'Rejected' AND description IS NOT NULL AND veryficationDate IS NOT NULL) 
+		OR (status = 'InProgress' AND veryficationDate IS NULL))
+)
+
+CREATE TABLE veryfication_application_tours (
+	veryficationApplicationId INT FOREIGN KEY REFERENCES veryfication_applications(id),
+	tourId int FOREIGN KEY REFERENCES tours(id),
+	PRIMARY KEY(veryficationApplicationId, tourId)
+)
+
+CREATE TABLE veryfication_application_leaders (
+	veryficationApplicationId INT FOREIGN KEY REFERENCES veryfication_applications(id),
+	leaderId int FOREIGN KEY REFERENCES leader_data(userId),
+	PRIMARY KEY(badgeApplicationId, leaderId)
+)

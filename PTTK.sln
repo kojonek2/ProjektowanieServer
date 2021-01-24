@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTTK", "PTTK\PTTK.csproj", "{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTTK", "PTTK\PTTK.csproj", "{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTTKTests", "PTTKTests\PTTKTests.csproj", "{8A73FA53-A883-4F43-905D-E1C7D319FBFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB8D1C4D-93B3-44DC-94F7-7A25DD1B85AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A73FA53-A883-4F43-905D-E1C7D319FBFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A73FA53-A883-4F43-905D-E1C7D319FBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A73FA53-A883-4F43-905D-E1C7D319FBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A73FA53-A883-4F43-905D-E1C7D319FBFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

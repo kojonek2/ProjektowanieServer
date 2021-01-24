@@ -8,13 +8,17 @@ namespace PTTK.Models
 {
     public class PTTKContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<MountainGroup> MountainGroups { get; set; }
-        public DbSet<Route> Routes { get; set; }
-        public DbSet<RoutePoint> RoutePoints { get; set; }
-        public DbSet<BadgeRank> BadgeRanks { get; set; }
-        public DbSet<Tour> Tours { get; set; }
-        public DbSet<BadgeApplication> BadgeApplications { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<MountainGroup> MountainGroups { get; set; }
+        public virtual DbSet<Route> Routes { get; set; }
+        public virtual DbSet<RoutePoint> RoutePoints { get; set; }
+        public virtual DbSet<BadgeRank> BadgeRanks { get; set; }
+        public virtual DbSet<Tour> Tours { get; set; }
+        public virtual DbSet<BadgeApplication> BadgeApplications { get; set; }
+
+        public PTTKContext()
+        {
+        }
 
         public PTTKContext(DbContextOptions<PTTKContext> options) : base(options)
         {
